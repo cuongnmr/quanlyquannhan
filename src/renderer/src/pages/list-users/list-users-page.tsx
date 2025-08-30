@@ -13,7 +13,7 @@ const ListUsersPage = () => {
     fetchUsers()
   }, [])
 
-  return <DataTable columns={columns} data={users} />
+  return <DataTable columns={columns} data={users} onRefresh={fetchUsers} />
 }
 
 export default ListUsersPage

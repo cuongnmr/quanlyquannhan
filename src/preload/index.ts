@@ -5,7 +5,8 @@ import {
   USER_GET_ONE_CHANNEL,
   USER_CREATE_CHANNEL,
   USER_UPDATE_CHANNEL,
-  USER_DELETE_CHANNEL
+  USER_DELETE_CHANNEL,
+  USER_UPDATE_BULK_CHANNEL
 } from '../main/channels'
 
 // Custom APIs for renderer
@@ -13,7 +14,8 @@ const api = {
   getUsers: () => ipcRenderer.invoke(USER_GET_CHANNEL),
   getUser: (id) => ipcRenderer.invoke(USER_GET_ONE_CHANNEL, id),
   createUser: (user) => ipcRenderer.invoke(USER_CREATE_CHANNEL, user),
-  updateUser: (id, name) => ipcRenderer.invoke(USER_UPDATE_CHANNEL, id, name),
+  updateUser: (id, data) => ipcRenderer.invoke(USER_UPDATE_CHANNEL, id, data),
+  updateBulkUser: (ids, data) => ipcRenderer.invoke(USER_UPDATE_BULK_CHANNEL, ids, data),
   deleteUser: (id) => ipcRenderer.invoke(USER_DELETE_CHANNEL, id),
   importDatabase: (file) => ipcRenderer.invoke('import:db', file)
 }

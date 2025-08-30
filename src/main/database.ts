@@ -54,6 +54,15 @@ export function updateUser(id: string, dto: Record<string, string>) {
   return null
 }
 
+export function updateBulkUser(ids: string[], dto: Record<string, string>) {
+  db.read()
+  const users = (db.data.users = db.data.users.map((user) => {
+    return ids.includes(user.id) ? { ...user, ...dto } : user
+  }))
+  db.write()
+  return users
+}
+
 export function deleteUser(id: string) {
   db.read()
   db.data.users = db.data.users.filter((u) => u.id !== id)
