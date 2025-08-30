@@ -11,6 +11,7 @@ declare global {
       updateBulkUser: (ids: string[], data: Record<string, string>) => Promise<User[]>
       deleteUser: (id: string) => Promise<void>
       importDatabase: (file: any) => Promise<void>
+      exportExcel: (fileName: string, data: any) => Promise<void>
     }
   }
 }

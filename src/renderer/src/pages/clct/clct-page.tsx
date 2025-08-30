@@ -191,11 +191,14 @@ function ThongKe({ users }: Props) {
       </ul>
       <li className="font-bold">Tôn giáo</li>
       <ul>
-        {Object.entries(groupByType(users, 'tongiao')).map(([key, value], idx) => (
-          <li key={idx}>
-            {key}: {value.length} ({value.map((user) => user.hoten + ', ')})
-          </li>
-        ))}
+        {Object.entries(groupByType(users, 'tongiao')).map(
+          ([key, value], idx) =>
+            key !== 'Không' && (
+              <li key={idx}>
+                {key}: {value.length} ({value.map((user) => user.hoten + ', ')})
+              </li>
+            )
+        )}
       </ul>
       <li className="font-bold">Học vấn</li>
       <ul>

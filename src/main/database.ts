@@ -1,10 +1,10 @@
 // electron/database.ts
-import { dirname, join } from 'path'
+import { app } from 'electron'
+import fs from 'fs'
 import { LowSync } from 'lowdb'
 import { JSONFileSync } from 'lowdb/node'
-import { app } from 'electron'
 import { nanoid } from 'nanoid'
-import fs from 'fs'
+import { dirname, join } from 'path'
 
 interface DBData {
   users: any[]

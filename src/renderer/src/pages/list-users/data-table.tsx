@@ -1,14 +1,4 @@
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getSortedRowModel,
-  useReactTable
-} from '@tanstack/react-table'
-import {
   Dialog,
   DialogClose,
   DialogContent,
@@ -18,8 +8,27 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@renderer/components/ui/dialog'
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  useReactTable
+} from '@tanstack/react-table'
 
+import { Button } from '@renderer/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@renderer/components/ui/dropdown-menu'
 import { Input } from '@renderer/components/ui/input'
+import { Label } from '@renderer/components/ui/label'
+import { ScrollArea, ScrollBar } from '@renderer/components/ui/scroll-area'
 import {
   Table,
   TableBody,
@@ -28,13 +37,10 @@ import {
   TableHeader,
   TableRow
 } from '@renderer/components/ui/table'
-import { User } from '@renderer/types/user'
+import { User, userProps } from '@renderer/types/user'
 import { useNavigate } from '@tanstack/react-router'
 import { ChangeEvent, useState } from 'react'
-import { ScrollArea, ScrollBar } from '@renderer/components/ui/scroll-area'
 import { DataTableViewOptions } from './columns-toggle'
-import { Button } from '@renderer/components/ui/button'
-import { Label } from '@renderer/components/ui/label'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -102,6 +108,30 @@ export function DataTable<TData extends User, TValue>({
     setOpen(false)
   }
 
+  async function handleExport(selected?: boolean) {
+    if (selected) {
+      const data = selectedRows.reduce<Record<string, string>[]>((acc, curr) => {
+        const data: Record<string, string> = {}
+        Object.entries(curr.original).forEach((item) => {
+          data[userProps[item[0]]] = item[1]
+        })
+        acc.push(data)
+        return acc
+      }, [])
+      await window.api.exportExcel('ds_quannhan', data)
+    } else {
+      const file = data.reduce<Record<string, string>[]>((acc, curr) => {
+        const data: Record<string, string> = {}
+        Object.entries(curr).forEach((item) => {
+          data[userProps[item[0]]] = item[1]
+        })
+        acc.push(data)
+        return acc
+      }, [])
+      await window.api.exportExcel('ds_quannhan', file)
+    }
+  }
+
   return (
     <div className="flex flex-col w-full h-full px-3">
       <div className="flex shrink-0 py-3 gap-2">
@@ -146,6 +176,19 @@ export function DataTable<TData extends User, TValue>({
               </Dialog>
             </div>
           )}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button>Xuất excel</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {selectedRows.length > 0 && (
+                <DropdownMenuItem onClick={() => handleExport(true)}>
+                  {selectedRows.length} mục đã chọn
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuItem onClick={() => handleExport()}>Tất cả danh sách</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       <div className="min-w-0 min-h-0 flex-1 -m-3">

@@ -6,7 +6,8 @@ import {
   USER_CREATE_CHANNEL,
   USER_UPDATE_CHANNEL,
   USER_DELETE_CHANNEL,
-  USER_UPDATE_BULK_CHANNEL
+  USER_UPDATE_BULK_CHANNEL,
+  EXPORT_EXCEL
 } from '../main/channels'
 
 // Custom APIs for renderer
@@ -17,7 +18,8 @@ const api = {
   updateUser: (id, data) => ipcRenderer.invoke(USER_UPDATE_CHANNEL, id, data),
   updateBulkUser: (ids, data) => ipcRenderer.invoke(USER_UPDATE_BULK_CHANNEL, ids, data),
   deleteUser: (id) => ipcRenderer.invoke(USER_DELETE_CHANNEL, id),
-  importDatabase: (file) => ipcRenderer.invoke('import:db', file)
+  importDatabase: (file) => ipcRenderer.invoke('import:db', file),
+  exportExcel: (fileName, data) => ipcRenderer.invoke(EXPORT_EXCEL, fileName, data)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

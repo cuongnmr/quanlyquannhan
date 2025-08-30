@@ -9,6 +9,7 @@ import {
   updateUser
 } from './database'
 import {
+  EXPORT_EXCEL,
   USER_CREATE_CHANNEL,
   USER_DELETE_CHANNEL,
   USER_GET_CHANNEL,
@@ -16,6 +17,7 @@ import {
   USER_UPDATE_BULK_CHANNEL,
   USER_UPDATE_CHANNEL
 } from './channels'
+import { exportExcel } from './xlsx'
 
 export function ipcHandler() {
   ipcMain.handle(USER_GET_CHANNEL, getUsers)
@@ -25,4 +27,5 @@ export function ipcHandler() {
   ipcMain.handle(USER_DELETE_CHANNEL, (_, id) => deleteUser(id))
   ipcMain.handle(USER_GET_ONE_CHANNEL, (_, id) => getUser(id))
   ipcMain.handle('import:db', (_, file) => importDB(file))
+  ipcMain.handle(EXPORT_EXCEL, (_, fileName, data) => exportExcel(data, fileName))
 }
