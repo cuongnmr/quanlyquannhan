@@ -1,6 +1,7 @@
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '@renderer/components/ui/sidebar'
 import { AppSidebar } from '@renderer/components/app-sidebar'
-import { Separator } from './ui/separator'
+import { SidebarInset, SidebarProvider, SidebarTrigger } from '@renderer/components/ui/sidebar'
+import { Link, useRouterState } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,9 +10,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from './ui/breadcrumb'
-import { Link, useRouterState } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
-import { ScrollArea, ScrollBar } from './ui/scroll-area'
+import { Separator } from './ui/separator'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [cumb, setCumb] = useState('')
@@ -47,12 +46,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </Breadcrumb>
           </div>
         </header>
-        <div className="min-w-0 min-h-0 flex-1">
-          <ScrollArea className="w-full h-full p-4">
-            {children}
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
-        </div>
+        <div className="min-w-0 min-h-0 flex-1 overflow-hidden">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   )

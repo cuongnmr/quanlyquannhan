@@ -7,7 +7,7 @@ declare global {
       getUsers: () => Promise<User[]>
       getUser: (id: string) => Promise<User>
       createUser: (user: User) => Promise<User>
-      updateUser: (id: string, name: string) => Promise<User | null>
+      updateUser: (id: string, data: Record<string, string>) => Promise<User | null>
       deleteUser: (id: string) => Promise<void>
     }
   }

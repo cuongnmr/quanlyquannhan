@@ -3,6 +3,7 @@ import { useRef, useState } from 'react'
 import FamilyForm from './family-form'
 import PersonalForm from './personal-form'
 import { User } from '@renderer/types/user'
+import { ScrollArea } from '@renderer/components/ui/scroll-area'
 
 const CreateUserPage = () => {
   const [data, setData] = useState<User | null>(null)
@@ -14,7 +15,7 @@ const CreateUserPage = () => {
   }
 
   return (
-    <>
+    <ScrollArea className="w-full h-full p-3">
       <div ref={div} className="-translate-y-4"></div>
       <Tabs value={tabIndex} onValueChange={setTabIndex}>
         <TabsList className="mb-3 w-full">
@@ -43,7 +44,7 @@ const CreateUserPage = () => {
           />
         </TabsContent>
       </Tabs>
-    </>
+    </ScrollArea>
   )
 }
 

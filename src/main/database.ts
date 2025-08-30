@@ -1,5 +1,5 @@
 // electron/database.ts
-import { join } from 'path'
+import { dirname, join } from 'path'
 import { LowSync } from 'lowdb'
 import { JSONFileSync } from 'lowdb/node'
 import { app } from 'electron'
@@ -9,7 +9,10 @@ interface DBData {
   users: any[]
 }
 // Specify the path to the database file
-const dbPath = join(app.getPath('userData'), 'db.json')
+const fileName = 'db.json'
+const dbPath = import.meta.env.DEV
+  ? join(app.getAppPath(), fileName)
+  : join(dirname(app.getPath('exe')), fileName)
 console.log('Database path:', dbPath)
 const adapter = new JSONFileSync<DBData>(dbPath)
 const db = new LowSync<DBData>(adapter, { users: [] })

@@ -1,14 +1,15 @@
 import {
   ColumnDef,
+  ColumnFiltersState,
+  SortingState,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  SortingState,
+  getFilteredRowModel,
   getSortedRowModel,
-  ColumnFiltersState,
-  getFilteredRowModel
+  useReactTable
 } from '@tanstack/react-table'
 
+import { Input } from '@renderer/components/ui/input'
 import {
   Table,
   TableBody,
@@ -17,18 +18,24 @@ import {
   TableHeader,
   TableRow
 } from '@renderer/components/ui/table'
+import { User } from '@renderer/types/user'
+import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Input } from '@renderer/components/ui/input'
+import { ScrollArea, ScrollBar } from '@renderer/components/ui/scroll-area'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+export function DataTable<TData extends User, TValue>({
+  columns,
+  data
+}: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [rowSelection, setRowSelection] = useState({})
+  const navigate = useNavigate()
   const table = useReactTable({
     data,
     columns,
@@ -45,58 +52,71 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     }
   })
 
+  function handleDetails(id: string) {
+    console.log(id)
+    navigate({ to: '/user/' + id })
+  }
+
   return (
-    <>
-      <div className="flex items-center py-4">
+    <div className="flex flex-col w-full h-full p-3">
+      <div className="flex flex-col shrink-0 pb-2">
         <Input
           placeholder="Tìm theo tên..."
           value={(table.getColumn('hoten')?.getFilterValue() as string) ?? ''}
           onChange={(event) => table.getColumn('hoten')?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
-        <div className="text-muted-foreground flex-1 text-sm">
-          {table.getFilteredSelectedRowModel().rows.length} of{' '}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
+        {table.getFilteredSelectedRowModel().rows.length > 0 && (
+          <div className="text-muted-foreground flex-1 text-sm">
+            Đã chọn {table.getFilteredSelectedRowModel().rows.length} mục.
+          </div>
+        )}
       </div>
-      <div className="overflow-hidden rounded-md border">
-        <Table className="w-full">
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
+      <div className="min-w-0 min-h-0 flex-1 -m-3">
+        <ScrollArea className="w-full h-full p-3">
+          <Table className="w-full">
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(header.column.columnDef.header, header.getContext())}
+                      </TableHead>
+                    )
+                  })}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  Không có kết quả
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    onDoubleClick={() => handleDetails(row.original.id)}
+                    key={row.id}
+                    data-state={row.getIsSelected() && 'selected'}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="h-24 text-center">
+                    Không có kết quả
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </div>
-    </>
+    </div>
   )
 }

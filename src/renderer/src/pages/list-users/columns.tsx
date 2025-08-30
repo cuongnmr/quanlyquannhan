@@ -1,6 +1,7 @@
 import { Checkbox } from '@renderer/components/ui/checkbox'
 import { User, userProps } from '@renderer/types/user'
 import { ColumnDef } from '@tanstack/react-table'
+import { getValue } from '@renderer/lib/mapping'
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -9,7 +10,11 @@ function getColumns(): ColumnDef<User>[] {
   return Object.entries(userProps).map(([key, value]) => {
     return {
       accessorKey: key,
-      header: value
+      header: value,
+      cell({ getValue: getVal }) {
+        const cellValue = getVal() as string
+        return getValue(key, cellValue)
+      }
     }
   })
 }

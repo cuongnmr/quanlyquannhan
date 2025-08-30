@@ -26,7 +26,7 @@ const items = [
   },
   {
     title: 'Danh sách',
-    url: 'users',
+    url: '/users',
     icon: Users
   },
   {
