@@ -22,6 +22,7 @@ import { User } from '@renderer/types/user'
 import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { ScrollArea, ScrollBar } from '@renderer/components/ui/scroll-area'
+import { DataTableViewOptions } from './columns-toggle'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -59,18 +60,18 @@ export function DataTable<TData extends User, TValue>({
 
   return (
     <div className="flex flex-col w-full h-full p-3">
-      <div className="flex flex-col shrink-0 pb-2">
-        <Input
-          placeholder="Tìm theo tên..."
-          value={(table.getColumn('hoten')?.getFilterValue() as string) ?? ''}
-          onChange={(event) => table.getColumn('hoten')?.setFilterValue(event.target.value)}
-          className="max-w-sm"
-        />
-        {table.getFilteredSelectedRowModel().rows.length > 0 && (
-          <div className="text-muted-foreground flex-1 text-sm">
-            Đã chọn {table.getFilteredSelectedRowModel().rows.length} mục.
-          </div>
-        )}
+      <div className="flex shrink-0 pb-2 gap-2">
+        <div className="flex-1">
+          <Input
+            placeholder="Tìm theo tên..."
+            value={(table.getColumn('hoten')?.getFilterValue() as string) ?? ''}
+            onChange={(event) => table.getColumn('hoten')?.setFilterValue(event.target.value)}
+            className="w-full"
+          />
+        </div>
+        <div className="shrink-0">
+          <DataTableViewOptions table={table} />
+        </div>
       </div>
       <div className="min-w-0 min-h-0 flex-1 -m-3">
         <ScrollArea className="w-full h-full p-3">

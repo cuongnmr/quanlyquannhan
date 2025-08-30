@@ -1,31 +1,18 @@
-import { Button } from './components/ui/button'
 import Versions from './components/Versions'
 
 function App(): React.JSX.Element {
-  const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
-
   return (
-    <>
-      <div className="creator">Powered by electron-vite</div>
-      <div className="text">
-        Build an Electron app with <span className="react">React</span>
-        &nbsp;and <span className="ts">TypeScript</span>
-      </div>
-      <p className="tip">
-        Please try pressing <code>F12</code> to open the devTool
-      </p>
-      <div className="actions">
-        <div className="action">
-          <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">
-            Documentation
-          </a>
-        </div>
-        <div className="action">
-          <Button onClick={ipcHandle}>Send IPC</Button>
-        </div>
-      </div>
+    <article className="prose max-w-none p-4">
+      <h1>Quản lý chất lượng chính trị</h1>
+
+      <h3>Tác giả</h3>
+      <ul>
+        <li>Nguyễn Mạnh Cường</li>
+        <li>a6, b2, c4, d2, Lư 575</li>
+      </ul>
+      <h3>Thông tin ứng dụng</h3>
       <Versions></Versions>
-    </>
+    </article>
   )
 }
 

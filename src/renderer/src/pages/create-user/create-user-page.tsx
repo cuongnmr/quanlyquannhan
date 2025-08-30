@@ -18,7 +18,7 @@ const CreateUserPage = () => {
     <ScrollArea className="w-full h-full p-3">
       <div ref={div} className="-translate-y-4"></div>
       <Tabs value={tabIndex} onValueChange={setTabIndex}>
-        <TabsList className="mb-3 w-full">
+        <TabsList className="mb-3 w-full mx-auto max-w-lg">
           <TabsTrigger value="personal">BẢN THÂN</TabsTrigger>
           <TabsTrigger value="family" disabled={Boolean(!data || data.id)}>
             GIA ĐÌNH

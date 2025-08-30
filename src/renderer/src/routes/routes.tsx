@@ -4,6 +4,7 @@ import { RootRoute } from './__root'
 import CreateUserPage from '@renderer/pages/create-user/create-user-page'
 import ListUsersPage from '@renderer/pages/list-users/list-users-page'
 import UserDetailsPage from '@renderer/pages/details-user/details-user-page'
+import CLCTPage from '@renderer/pages/clct/clct-page'
 
 export const HomeRoute = createRoute({
   getParentRoute: () => RootRoute,
@@ -41,9 +42,19 @@ export const UserDetailsRoute = createRoute({
   }
 })
 
+export const CLCTRoute = createRoute({
+  getParentRoute: () => RootRoute,
+  path: '/clct',
+  component: CLCTPage,
+  beforeLoad() {
+    return { title: 'Chất lượng chính trị' }
+  }
+})
+
 export const rootTree = RootRoute.addChildren([
   HomeRoute,
   CreatePageRoute,
   ListUsersRoute,
-  UserDetailsRoute
+  UserDetailsRoute,
+  CLCTRoute
 ])
