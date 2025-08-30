@@ -1,0 +1,14 @@
+import { ElectronAPI } from '@electron-toolkit/preload'
+
+declare global {
+  interface Window {
+    electron: ElectronAPI
+    api: {
+      getUsers: () => Promise<User[]>
+      getUser: (id: string) => Promise<User>
+      createUser: (user: User) => Promise<User>
+      updateUser: (id: string, name: string) => Promise<User | null>
+      deleteUser: (id: string) => Promise<void>
+    }
+  }
+}
