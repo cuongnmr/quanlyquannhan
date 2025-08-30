@@ -9,6 +9,7 @@ declare global {
       createUser: (user: User) => Promise<User>
       updateUser: (id: string, data: Record<string, string>) => Promise<User | null>
       deleteUser: (id: string) => Promise<void>
+      importDatabase: (file: any) => Promise<void>
     }
   }
 }

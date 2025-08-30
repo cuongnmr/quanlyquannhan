@@ -1,4 +1,4 @@
-import { ChartBar, CirclePlus, GalleryVerticalEnd, Home, Settings, Users } from 'lucide-react'
+import { ChartBar, CirclePlus, GalleryVerticalEnd, Home, Import, Users } from 'lucide-react'
 import * as React from 'react'
 
 import {
@@ -35,9 +35,9 @@ const items = [
     icon: ChartBar
   },
   {
-    title: 'Cài đặt',
-    url: '#',
-    icon: Settings
+    title: 'Cập nhật CSDL',
+    url: '/import-db',
+    icon: Import
   }
 ]
 

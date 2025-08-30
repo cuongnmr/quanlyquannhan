@@ -14,7 +14,8 @@ const api = {
   getUser: (id) => ipcRenderer.invoke(USER_GET_ONE_CHANNEL, id),
   createUser: (user) => ipcRenderer.invoke(USER_CREATE_CHANNEL, user),
   updateUser: (id, name) => ipcRenderer.invoke(USER_UPDATE_CHANNEL, id, name),
-  deleteUser: (id) => ipcRenderer.invoke(USER_DELETE_CHANNEL, id)
+  deleteUser: (id) => ipcRenderer.invoke(USER_DELETE_CHANNEL, id),
+  importDatabase: (file) => ipcRenderer.invoke('import:db', file)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

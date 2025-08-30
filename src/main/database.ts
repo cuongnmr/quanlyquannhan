@@ -4,13 +4,14 @@ import { LowSync } from 'lowdb'
 import { JSONFileSync } from 'lowdb/node'
 import { app } from 'electron'
 import { nanoid } from 'nanoid'
+import fs from 'fs'
 
 interface DBData {
   users: any[]
 }
 // Specify the path to the database file
 const fileName = 'db.json'
-const dbPath = import.meta.env.DEV
+const dbPath = !app.isPackaged
   ? join(app.getAppPath(), fileName)
   : join(dirname(app.getPath('exe')), fileName)
 console.log('Database path:', dbPath)
@@ -57,4 +58,20 @@ export function deleteUser(id: string) {
   db.read()
   db.data.users = db.data.users.filter((u) => u.id !== id)
   db.write()
+}
+
+export function importDB({ fileName, fileData }: any) {
+  let savePath: string
+
+  if (app.isPackaged) {
+    // Production path: Same directory as the executable
+    savePath = join(dirname(app.getPath('exe')), fileName)
+  } else {
+    // Development path: Project root directory
+    savePath = join(app.getAppPath(), fileName)
+  }
+
+  const jsonString = JSON.stringify(fileData, null, 2)
+  fs.writeFileSync(savePath, jsonString)
+  return savePath
 }

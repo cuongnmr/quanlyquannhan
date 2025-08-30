@@ -5,6 +5,7 @@ import CreateUserPage from '@renderer/pages/create-user/create-user-page'
 import ListUsersPage from '@renderer/pages/list-users/list-users-page'
 import UserDetailsPage from '@renderer/pages/details-user/details-user-page'
 import CLCTPage from '@renderer/pages/clct/clct-page'
+import ImportDBPage from '@renderer/pages/import-db/import-db-page'
 
 export const HomeRoute = createRoute({
   getParentRoute: () => RootRoute,
@@ -51,10 +52,20 @@ export const CLCTRoute = createRoute({
   }
 })
 
+export const ImportDBRoute = createRoute({
+  getParentRoute: () => RootRoute,
+  path: '/import-db',
+  component: ImportDBPage,
+  beforeLoad() {
+    return { title: 'Cập nhật cơ sở dữ liệu' }
+  }
+})
+
 export const rootTree = RootRoute.addChildren([
   HomeRoute,
   CreatePageRoute,
   ListUsersRoute,
   UserDetailsRoute,
-  CLCTRoute
+  CLCTRoute,
+  ImportDBRoute
 ])
