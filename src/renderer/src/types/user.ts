@@ -60,7 +60,7 @@ export const userProps: Record<string, string> = {
   nhapngu: 'Ngày nhập ngũ',
   capbac: 'Cấp bậc',
   chucvu: 'Chức vụ',
-  donvi: 'Đơn vị',
+  bienche: 'Biên chế',
   vanhoa: 'Văn hóa',
   trinhdo: 'Trình độ',
   tentruong: 'Tên trường',

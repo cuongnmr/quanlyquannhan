@@ -28,7 +28,7 @@ export const mapChucVu = (chucvu: string) => {
   return mapping[chucvu] || chucvu
 }
 
-export function mapDonVi(input: string): string {
+export function mapBienChe(input: string): string {
   // Bản đồ quy tắc
   const mapping: Record<string, string> = {
     a: 'Tiểu đội',
@@ -53,16 +53,6 @@ export function mapDonVi(input: string): string {
   // Ghép lại thành chuỗi
   return result.join(', ')
 }
-
-export function mapBienChe(value: string) {
-  if (!/^b\d+$/i.test(value)) {
-    throw new Error('Giá trị không hợp lệ, phải ở dạng b + số')
-  }
-  // lấy số sau chữ b
-  const number = value.slice(1)
-  return `Trung đội ${number}`
-}
-
 export const mapDoanDang = (doandang: string) => {
   const mapping: Record<string, string> = {
     doanvien: 'Đoàn viên',
@@ -81,7 +71,7 @@ export function getValue(key: string, input?: string) {
     case 'chucvu':
       return mapChucVu(input)
     case 'donvi':
-      return mapDonVi(input)
+      return mapBienChe(input)
     case 'bienche':
       return mapBienChe(input)
     case 'doandang':

@@ -5,9 +5,12 @@ import {
   CardHeader,
   CardTitle
 } from '@renderer/components/ui/card'
+import { ScrollArea } from '@renderer/components/ui/scroll-area'
 import { mapBienChe, mapCapBac, mapChucVu } from '@renderer/lib/mapping'
+import { User } from '@renderer/types/user'
 import { useEffect, useMemo, useState } from 'react'
 import {
+  bienCheTrungDoi,
   countDangVien,
   countDoanVien,
   countHSQCS,
@@ -17,15 +20,12 @@ import {
   countTrinhDo,
   findBt,
   getBCH,
-  getUniqueBienche,
   groupByType,
   nhomTheoNamNN,
   nhomTheoQueQuan,
   sortArrayString,
   thongKeChucVuQNCN
 } from './clct-helper'
-import { User } from '@renderer/types/user'
-import { ScrollArea } from '@renderer/components/ui/scroll-area'
 
 export default function CLCTPage() {
   const [users, setUsers] = useState<User[]>([])
@@ -39,12 +39,13 @@ export default function CLCTPage() {
   }, [])
 
   const bienche = useMemo(() => {
-    const bcUnique = sortArrayString(getUniqueBienche(users))
+    const bcUnique = sortArrayString(bienCheTrungDoi(users))
+    console.log(bcUnique)
     return bcUnique.reduce(
       (acc, curr) => {
         acc[curr] = []
         users.forEach((user) => {
-          if (user.bienche === curr) acc[curr].push(user)
+          if (user.bienche?.includes(curr)) acc[curr].push(user)
         })
         return acc
       },
@@ -54,13 +55,13 @@ export default function CLCTPage() {
 
   return (
     <ScrollArea className="w-full h-full p-3">
-      <Card>
+      <Card className="mb-3">
         <CardHeader>
           <CardTitle>Quân số và biên chế</CardTitle>
           <CardDescription>Đại đội 4</CardDescription>
         </CardHeader>
         <CardContent>
-          <article className="prose max-w-none">
+          <article className="prose prose-sm max-w-none">
             <ul>
               <li>Tổng quân số: {users.length} đồng chí</li>
               <li>Sỹ quan: {countSQ(users)} đồng chí</li>
@@ -104,7 +105,7 @@ export default function CLCTPage() {
           <CardDescription>Chất lượng cán bộ, QNCN, HSQ - CS</CardDescription>
         </CardHeader>
         <CardContent>
-          <article className="prose max-w-none">
+          <article className="prose prose-sm max-w-none">
             <ol>
               <li>
                 <div>Sỹ quan: {countSQ(users)} đồng chí</div>

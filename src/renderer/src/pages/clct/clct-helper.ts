@@ -8,6 +8,28 @@ export function getUniqueBienche(users: User[]): string[] {
   return Array.from(set)
 }
 
+export function bienCheTrungDoi(users: User[]) {
+  const allBValues: string[] = []
+
+  // Define a regular expression to find 'b' followed by one or more digits
+  // The 'g' flag ensures that all matches are found, not just the first one.
+  const regex = /b\d+/g
+
+  // Use matchAll to find all regex matches in each user's bienche string
+  users.forEach((user) => {
+    // String.matchAll returns an iterator.
+    if (user.bienche) {
+      const matches = user.bienche.matchAll(regex)
+      // Loop through the iterator and push each match into an array
+      for (const match of matches) {
+        allBValues.push(match[0])
+      }
+    }
+  })
+
+  // Use a Set to get only the unique values from the array
+  return [...new Set(allBValues)]
+}
 export const bch = ['ct', 'cp', 'ctv', 'ctvp', 'bt', 'dt', 'dp', 'ctvd', 'ctvpd']
 
 /** Check có phải sỹ quan không */

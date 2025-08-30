@@ -37,7 +37,6 @@ const formSchema = z.object({
   nhapngu: z.string({ error }).min(6, { error }),
   capbac: z.string({ error }),
   chucvu: z.string({ error }),
-  donvi: z.string({ error }),
   vanhoa: z.string().min(2, { error }),
   vaodoan: z.string({ error }).optional(),
   vaodang: z.string({ error }).optional(),
@@ -79,7 +78,6 @@ export default function PersonalForm({ onFinish, defaultData }: Props) {
       tongiao: 'Không',
       doandang: 'doanvien',
       dantoc: 'Kinh',
-      donvi: 'c4',
       thanhphan: 'Bần nông',
       nuocngoai: 'Không',
       nguoithandinuocngoai: 'Không',
@@ -230,7 +228,7 @@ export default function PersonalForm({ onFinish, defaultData }: Props) {
           )}
         />
 
-        <div className="grid grid-cols-3 items-start gap-3">
+        <div className="grid grid-cols-2 items-start gap-3">
           <FormField
             control={form.control}
             name="capbac"
@@ -282,35 +280,23 @@ export default function PersonalForm({ onFinish, defaultData }: Props) {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="donvi"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Đơn vị</FormLabel>
-                <FormControl>
-                  <Input placeholder={placeholder} type="text" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </div>
 
-        <div className="grid grid-cols-3 items-start gap-4">
-          <FormField
-            control={form.control}
-            name="bienche"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Biên chế</FormLabel>
-                <FormControl>
-                  <Input placeholder={placeholder} type="text" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <FormField
+          control={form.control}
+          name="bienche"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Biên chế</FormLabel>
+              <FormControl>
+                <Input placeholder={placeholder} type="text" {...field} />
+              </FormControl>
+              <FormMessage />
+              <FormDescription>Tiểu đội, Trung đội, Đại đội. Ví dụ: a5, b2, c4</FormDescription>
+            </FormItem>
+          )}
+        />
+        <div className="grid grid-cols-2 items-start gap-4">
           <FormField
             control={form.control}
             name="vanhoa"
