@@ -40,7 +40,6 @@ export default function CLCTPage() {
 
   const bienche = useMemo(() => {
     const bcUnique = sortArrayString(bienCheTrungDoi(users))
-    console.log(bcUnique)
     return bcUnique.reduce(
       (acc, curr) => {
         acc[curr] = []

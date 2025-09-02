@@ -32,8 +32,7 @@ const ImportDBPage = () => {
   const handleSaveFile = async () => {
     if (fileData) {
       try {
-        const filePath = await window.api.importDatabase({ fileName, fileData })
-        console.log(filePath)
+        await window.api.importDatabase({ fileName, fileData })
         toast.success('Cập nhật thành công')
       } catch (error) {
         toast.error('Cập nhật không thành công')

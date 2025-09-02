@@ -37,9 +37,10 @@ import {
   TableHeader,
   TableRow
 } from '@renderer/components/ui/table'
+import { getValue } from '@renderer/lib/mapping'
 import { User, userProps } from '@renderer/types/user'
 import { useNavigate } from '@tanstack/react-router'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, RefObject, useState } from 'react'
 import { DataTableViewOptions } from './columns-toggle'
 
 interface DataTableProps<TData, TValue> {
@@ -56,12 +57,14 @@ const mapping: Record<string, string> = {
 
 interface Props<TData extends User, TValue> extends DataTableProps<TData, TValue> {
   onRefresh: () => Promise<void>
+  ref: RefObject<HTMLDivElement | null>
 }
 
 export function DataTable<TData extends User, TValue>({
   columns,
   data,
-  onRefresh
+  onRefresh,
+  ref
 }: Props<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -87,7 +90,6 @@ export function DataTable<TData extends User, TValue>({
   const selectedRows = table.getSelectedRowModel().rows
 
   function handleDetails(id: string) {
-    console.log(id)
     navigate({ to: '/user/' + id })
   }
 
@@ -123,7 +125,7 @@ export function DataTable<TData extends User, TValue>({
       const file = data.reduce<Record<string, string>[]>((acc, curr) => {
         const data: Record<string, string> = {}
         Object.entries(curr).forEach((item) => {
-          data[userProps[item[0]]] = item[1]
+          data[userProps[item[0]]] = getValue(item[0], item[1])
         })
         acc.push(data)
         return acc
@@ -192,7 +194,7 @@ export function DataTable<TData extends User, TValue>({
         </div>
       </div>
       <div className="min-w-0 min-h-0 flex-1 -m-3">
-        <ScrollArea className="w-full h-full p-3">
+        <ScrollArea className="w-full h-full p-3" ref={ref}>
           <Table className="w-full">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (

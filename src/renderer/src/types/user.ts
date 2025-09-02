@@ -50,6 +50,8 @@ interface Parent {
   quequanme?: string
   truquanme?: string
   bomelyhon?: string
+  con?: string
+  vochong?: string
 }
 
 export type User = Personal & Parent
@@ -100,6 +102,7 @@ export const userProps: Record<string, string> = {
   nammatme: 'Năm mất mẹ',
   quequanme: 'Quê quán mẹ',
   truquanme: 'Nơi trú quán mẹ',
+  vochong: 'Vợ/chồng',
   con: 'Con cái',
   anhchiem: 'Anh chị em',
   bomelyhon: 'Bố mẹ ly hôn'

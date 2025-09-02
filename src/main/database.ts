@@ -38,7 +38,7 @@ export function getUser(id: string) {
 export function createUser(user: any) {
   db.read()
   user.id = nanoid()
-  db.data.users.push(user)
+  db.data.users.push({ ...user, createdAt: new Date(), updatedAt: new Date() })
   db.write()
   return user
 }
@@ -47,7 +47,7 @@ export function updateUser(id: string, dto: Record<string, string>) {
   db.read()
   const user = db.data.users.find((u) => u.id === id)
   if (user) {
-    Object.assign(user, dto)
+    Object.assign(user, { ...dto, updatedAt: new Date() })
     db.write()
     return user
   }
@@ -57,7 +57,7 @@ export function updateUser(id: string, dto: Record<string, string>) {
 export function updateBulkUser(ids: string[], dto: Record<string, string>) {
   db.read()
   const users = (db.data.users = db.data.users.map((user) => {
-    return ids.includes(user.id) ? { ...user, ...dto } : user
+    return ids.includes(user.id) ? { ...user, ...dto, updatedAt: new Date() } : user
   }))
   db.write()
   return users

@@ -63,8 +63,7 @@ const UserDetailsPage = () => {
   async function handleSave() {
     if (!user) return setIsEditing(false)
     initData.current = { ...user }
-    const res = await window.api.updateUser(user.id, user)
-    console.log(res)
+    await window.api.updateUser(user.id, user)
     setIsEditing(false)
   }
 

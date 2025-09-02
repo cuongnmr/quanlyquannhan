@@ -93,7 +93,6 @@ export default function PersonalForm({ onFinish, defaultData }: Props) {
         onFinish((prev: any) => ({ ...prev, ...values }))
       } else {
         const res = await window.api.createUser(values)
-        console.log(res)
         onFinish((prev: any) => ({ ...prev, ...values, id: res.id }))
       }
       toast.success('Lưu thành công')
@@ -116,7 +115,7 @@ export default function PersonalForm({ onFinish, defaultData }: Props) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit, (inValid) => {
-          console.log(inValid)
+          console.error(inValid)
         })}
         className="mx-auto w-full max-w-lg space-y-4"
       >

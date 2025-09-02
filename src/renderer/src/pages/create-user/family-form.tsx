@@ -11,6 +11,7 @@ import {
 } from '@renderer/components/ui/form'
 import { Input } from '@renderer/components/ui/input'
 import { Textarea } from '@renderer/components/ui/textarea'
+import { useNavigate } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -32,7 +33,8 @@ const formSchema = z.object({
   truquanme: z.string().optional(),
   con: z.string().optional(),
   anhchiem: z.string().optional(),
-  bomelyhon: z.string().optional()
+  bomelyhon: z.string().optional(),
+  vochong: z.string().optional()
 })
 
 const placeholder = 'Nhập thông tin'
@@ -43,7 +45,7 @@ interface Props {
 }
 
 export default function FamilyForm({ onReturn, userId }: Props) {
-  //   const navigate = useNavigate()
+  const navigate = useNavigate()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema)
@@ -54,10 +56,9 @@ export default function FamilyForm({ onReturn, userId }: Props) {
       if (!userId) {
         throw new Error('Chưa cung cấp user id!')
       }
-      console.log(values)
-      //   await updateUser(userId, values)
+      await window.api.updateUser(userId, values)
       toast.success('Lưu thành công!')
-      //   navigate({ to: '/users' })
+      navigate({ to: '/users' })
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message)
@@ -192,7 +193,6 @@ export default function FamilyForm({ onReturn, userId }: Props) {
         />
 
         {/* mom */}
-
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-6">
             <FormField
@@ -327,6 +327,25 @@ export default function FamilyForm({ onReturn, userId }: Props) {
                 />
               </FormControl>
               <FormDescription>Ví dụ: Anh trai Nguyễn Văn A, 1996, Công nhân</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="vochong"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Thông tin Vợ/chồng</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Họ tên, năm sinh, nghề nghiệp"
+                  className="resize-none"
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription>Ví dụ: Vợ Nguyễn Thị A, 1996, Công nhân</FormDescription>
               <FormMessage />
             </FormItem>
           )}
