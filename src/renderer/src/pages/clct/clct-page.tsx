@@ -20,12 +20,11 @@ import {
   countTrinhDo,
   findBt,
   getBCH,
-  groupByType,
   nhomTheoNamNN,
-  nhomTheoQueQuan,
   sortArrayString,
   thongKeChucVuQNCN
 } from './clct-helper'
+import Statistics from './statistics'
 
 export default function CLCTPage() {
   const [users, setUsers] = useState<User[]>([])
@@ -132,22 +131,20 @@ export default function CLCTPage() {
               </li>
               <li>
                 <div>Hạ sỹ quan - Chiến sỹ: {countHSQCS(users)}</div>
-                <ul>
-                  {Object.entries(nhomTheoNamNN(users)).map(([year, users]) => {
-                    return (
-                      <li key={year}>
-                        <div>
-                          Nhập ngũ năm {year}: {users.length}
-                        </div>
-                        <ThongKe users={users} />
-                      </li>
-                    )
-                  })}
-                  <li>
-                    <div>Tổng đơn vị</div>
-                    <ThongKe users={users} />
-                  </li>
-                </ul>
+                {Object.entries(nhomTheoNamNN(users)).map(([year, users]) => {
+                  return (
+                    <details key={year} open>
+                      <summary className="uppercase font-bold cursor-pointer">
+                        Nhập ngũ năm {year}: {users.length}
+                      </summary>
+                      <Statistics users={users} />
+                    </details>
+                  )
+                })}
+                <details open>
+                  <summary className="uppercase font-bold">Tổng đơn vị</summary>
+                  <Statistics users={users} />
+                </details>
               </li>
             </ol>
           </article>
@@ -160,93 +157,4 @@ export default function CLCTPage() {
 function capBacTenChucVu(user?: User) {
   if (!user) return ''
   return mapCapBac(user.capbac) + ' ' + user.hoten + ' - ' + mapChucVu(user.chucvu)
-}
-
-interface Props {
-  users: User[]
-}
-function ThongKe({ users }: Props) {
-  const usersKK = users.filter((user) => user.khokhan)
-  const usersBoChet = users.filter((user) => user.nammatbo)
-  const usersMeChet = users.filter((user) => user.nammatme)
-  const usersBomelyhon = users.filter((user) => user.bomelyhon)
-  return (
-    <ul>
-      <li className="font-bold">Quê quán</li>
-      <ul>
-        {Object.entries(nhomTheoQueQuan(users)).map(([key, value], idx) => (
-          <li key={idx}>
-            {key}: {value.length}
-          </li>
-        ))}
-      </ul>
-      <li className="font-bold">Dân tộc</li>
-      <ul>
-        {Object.entries(groupByType(users, 'dantoc')).map(([key, value], idx) => (
-          <li key={idx}>
-            {key}: {value.length}
-          </li>
-        ))}
-      </ul>
-      <li className="font-bold">Tôn giáo</li>
-      <ul>
-        {Object.entries(groupByType(users, 'tongiao')).map(
-          ([key, value], idx) =>
-            key !== 'Không' && (
-              <li key={idx}>
-                {key}: {value.length} ({value.map((user) => user.hoten + ', ')})
-              </li>
-            )
-        )}
-      </ul>
-      <li className="font-bold">Học vấn</li>
-      <ul>
-        {Object.entries(groupByType(users, 'vanhoa')).map(([key, value], idx) => (
-          <li key={idx}>
-            {key}: {value.length} ({value.map((user) => user.hoten + ', ')})
-          </li>
-        ))}
-      </ul>
-      <li className="font-bold">Trình độ</li>
-      <ul>
-        {Object.entries({ dh: 'Đại học', cd: 'Cao Đẳng', tc: 'Trung cấp' }).map(([key, value]) => (
-          <li key={key}>
-            {value}: {countTrinhDo(users, key)}
-          </li>
-        ))}
-      </ul>
-      <li className="font-bold">Hoàn cảnh khó khăn: {usersKK.length}</li>
-      <ul>
-        {usersKK.map((user) => (
-          <li key={user.id}>
-            {user.hoten}: {user.khokhan}
-          </li>
-        ))}
-      </ul>
-      <li className="font-bold">Bố chết: {usersBoChet.length}</li>
-      <ul>
-        {usersBoChet.map((user) => (
-          <li key={user.id}>
-            {user.hoten}: Năm mất: {user.nammatbo}
-          </li>
-        ))}
-      </ul>
-      <li className="font-bold">Mẹ chết: {usersMeChet.length}</li>
-      <ul>
-        {usersMeChet.map((user) => (
-          <li key={user.id}>
-            {user.hoten}: Năm mất: {user.nammatme}
-          </li>
-        ))}
-      </ul>
-      <li className="font-bold">Bố mẹ ly hôn: {usersBomelyhon.length}</li>
-      <ul>
-        {usersBomelyhon.map((user) => (
-          <li key={user.id}>
-            {user.hoten}: {user.bomelyhon}
-          </li>
-        ))}
-      </ul>
-    </ul>
-  )
 }

@@ -1,14 +1,4 @@
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from '@renderer/components/ui/dialog'
-import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
@@ -24,10 +14,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuTrigger
 } from '@renderer/components/ui/dropdown-menu'
 import { Input } from '@renderer/components/ui/input'
 import { Label } from '@renderer/components/ui/label'
+import { Popover, PopoverContent, PopoverTrigger } from '@renderer/components/ui/popover'
 import { ScrollArea, ScrollBar } from '@renderer/components/ui/scroll-area'
 import {
   Table,
@@ -42,6 +34,7 @@ import { User, userProps } from '@renderer/types/user'
 import { useNavigate } from '@tanstack/react-router'
 import { ChangeEvent, RefObject, useState } from 'react'
 import { DataTableViewOptions } from './columns-toggle'
+import { Sheet, UserRoundPen } from 'lucide-react'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -149,40 +142,57 @@ export function DataTable<TData extends User, TValue>({
           <DataTableViewOptions table={table} />
           {selectedRows.length > 0 && (
             <div className="shrink-0">
-              <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="outline">Sửa</Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Sửa hàng loạt</DialogTitle>
-                    <DialogDescription>Đã chọn {selectedRows.length} mục</DialogDescription>
-                  </DialogHeader>
-                  <div className="space-y-3">
-                    {Object.entries(mapping).map(([key, value]) => (
-                      <div key={key} className="grid w-full items-center gap-3">
-                        <Label>{value}</Label>
-                        <Input type="text" name={key} onChange={handleChange} />
-                      </div>
-                    ))}
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" size="icon">
+                    <UserRoundPen />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80">
+                  <div className="grid gap-4">
+                    <div className="space-y-2">
+                      <h4 className="leading-none font-medium">Sửa hàng loạt</h4>
+                      <p className="text-muted-foreground text-sm">
+                        Đã chọn {selectedRows.length} mục
+                      </p>
+                    </div>
+                    <div className="grid gap-2">
+                      {Object.entries(mapping).map(([key, value]) => (
+                        <div key={key} className="grid grid-cols-3 items-center gap-4">
+                          <Label htmlFor={key}>{value}</Label>
+                          <Input
+                            id={key}
+                            name={key}
+                            className="col-span-2 h-8"
+                            type="text"
+                            placeholder="Giá trị"
+                            onChange={handleChange}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <Button variant="outline" onClick={() => setOpen(false)}>
+                        Đóng
+                      </Button>
+                      <Button type="button" onClick={handleSubmit}>
+                        Lưu
+                      </Button>
+                    </div>
                   </div>
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Button variant="outline">Đóng</Button>
-                    </DialogClose>
-                    <Button type="button" onClick={handleSubmit}>
-                      Lưu
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+                </PopoverContent>
+              </Popover>
             </div>
           )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button>Xuất excel</Button>
+              <Button variant="outline">
+                <Sheet />
+                <span className="hidden lg:inline">Xuất excel</span>
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
+              <DropdownMenuLabel>Xuất file excel</DropdownMenuLabel>
               {selectedRows.length > 0 && (
                 <DropdownMenuItem onClick={() => handleExport(true)}>
                   {selectedRows.length} mục đã chọn

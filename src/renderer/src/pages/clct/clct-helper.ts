@@ -1,5 +1,6 @@
 import { removeDiacritics } from '@renderer/lib/text'
 import { User } from '@renderer/types/user'
+import slugify from 'slugify'
 
 export function getUniqueBienche(users: User[]): string[] {
   const set = new Set(
@@ -70,7 +71,7 @@ export function nhomTheoNamNN(users: User[]) {
   for (const user of hsqcs) {
     const parts = user.nhapngu.split('/')
     if (parts.length > 1) {
-      const year = parts[parts.length - 1] // Lấy 4 ký tự cuối sau dấu '/'
+      const year = parts[parts.length - 1].trim() // Lấy 4 ký tự cuối sau dấu '/'
       if (!groupedUsers[year]) {
         groupedUsers[year] = []
       }
@@ -81,19 +82,24 @@ export function nhomTheoNamNN(users: User[]) {
 }
 
 /** Nhóm HSQ CS theo quê quán */
-export function nhomTheoQueQuan(users: User[]) {
-  const groupedUsers: Record<string, User[]> = {}
-  for (const user of users) {
-    const parts = user.quequan.split(',')
-    if (parts.length > 1) {
-      const province = parts[parts.length - 1] // Lấy các ký tự cuối sau dấu ','
-      if (!groupedUsers[province]) {
-        groupedUsers[province] = []
+export function nhomquequan(users: User[]) {
+  return users.reduce(
+    (acc, user) => {
+      const parts = user.quequan.split(',')
+      if (parts.length > 1) {
+        const key = slugify(parts[parts.length - 1], {
+          replacement: '_',
+          locale: 'vi',
+          lower: true,
+          trim: true
+        })
+        if (!acc[key]) acc[key] = []
+        acc[key].push(user)
       }
-      groupedUsers[province].push(user)
-    }
-  }
-  return groupedUsers
+      return acc
+    },
+    {} as Record<string, User[]>
+  )
 }
 
 /** Nhóm HSQ CS theo type tùy chỉnh */
@@ -101,12 +107,13 @@ export function groupByType(users: User[], type: keyof Omit<User, 'laodongchinh'
   const hsqcs = filterHSQCS(users)
   const groupedUsers: Record<string, User[]> = {}
   for (const user of hsqcs) {
-    const stage = user[type] // Lấy các ký tự cuối sau dấu ','
+    const stage = user[type]
     if (stage) {
-      if (!groupedUsers[stage]) {
-        groupedUsers[stage] = []
+      const key = stage.toLowerCase().trim()
+      if (!groupedUsers[key]) {
+        groupedUsers[key] = []
       }
-      groupedUsers[stage].push(user)
+      groupedUsers[key].push(user)
     }
   }
   return groupedUsers

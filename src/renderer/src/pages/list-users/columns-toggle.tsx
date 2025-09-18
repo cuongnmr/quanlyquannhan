@@ -19,7 +19,7 @@ export function DataTableViewOptions<TData>({ table }: { table: Table<TData> }) 
       <DropdownMenuTrigger asChild>
         <Button variant="outline">
           <Settings2 />
-          Xem
+          <span className="hidden lg:inline">Xem</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

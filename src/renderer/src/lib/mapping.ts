@@ -81,3 +81,44 @@ export function getValue(key: string, input?: string) {
       return input
   }
 }
+
+export const VietNamProvinces = {
+  tuyen_quang: 'Tuyên Quang',
+  lao_cai: 'Lào Cai',
+  thai_nguyen: 'Thái Nguyên',
+  phu_tho: 'Phú Thọ',
+  bac_ninh: 'Bắc Ninh',
+  hung_yen: 'Hưng Yên',
+  hai_phong: 'Hải Phòng',
+  ninh_binh: 'Ninh Bình',
+  quang_tri: 'Quảng Trị',
+  da_nang: 'Đà Nẵng',
+  quang_ngai: 'Quảng Ngãi',
+  gia_lai: 'Gia Lai',
+  khanh_hoa: 'Khánh Hòa',
+  lam_dong: 'Lâm Đồng',
+  dak_lak: 'Đắk Lắk',
+  tp_ho_chi_minh: 'TP. Hồ Chí Minh',
+  dong_nai: 'Đồng Nai',
+  tay_ninh: 'Tây Ninh',
+  can_tho: 'Cần Thơ',
+  vinh_long: 'Vĩnh Long',
+  dong_thap: 'Đồng Tháp',
+  ca_mau: 'Cà Mau',
+  an_giang: 'An Giang',
+  ha_noi: 'Hà Nội',
+  hue: 'Huế',
+  lai_chau: 'Lai Châu',
+  dien_bien: 'Điện Biên',
+  son_la: 'Sơn La',
+  lang_son: 'Lạng Sơn',
+  quang_ninh: 'Quảng Ninh',
+  thanh_hoa: 'Thanh Hóa',
+  nghe_an: 'Nghệ An',
+  ha_tinh: 'Hà Tĩnh',
+  cao_bang: 'Cao Bằng'
+} as const
+
+export function getProvince(input: string) {
+  return VietNamProvinces[input] ?? ''
+}
