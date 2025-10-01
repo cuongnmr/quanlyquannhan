@@ -25,6 +25,11 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import { Popover, PopoverContent, PopoverTrigger } from '@renderer/components/ui/popover'
+import { cn } from '@renderer/lib/utils'
+import { CalendarIcon } from 'lucide-react'
+import { Calendar } from '@renderer/components/ui/calendar'
+import { format } from 'date-fns'
 
 const error = 'Chưa đủ thông tin',
   placeholder = 'Nhập thông tin'
@@ -33,7 +38,9 @@ const formSchema = z.object({
   hoten: z.string({
     error
   }),
-  ngaysinh: z.string({ error }),
+  ngaysinh: z.date({
+    error: 'A date of birth is required.'
+  }),
   nhapngu: z.string({ error }).min(6, { error }),
   capbac: z.string({ error }),
   chucvu: z.string({ error }),
@@ -139,9 +146,35 @@ export default function PersonalForm({ onFinish, defaultData }: Props) {
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Ngày sinh</FormLabel>
-              <FormControl>
-                <Input type="text" placeholder="Nhập thông tin" {...field} />
-              </FormControl>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={'outline'}
+                      className={cn(
+                        'pl-3 text-left font-normal',
+                        !field.value && 'text-muted-foreground'
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, 'dd/MM/yyyy')
+                      ) : (
+                        <span>Chọn ngày sinh</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
+                    captionLayout="dropdown"
+                  />
+                </PopoverContent>
+              </Popover>
               <FormMessage />
             </FormItem>
           )}

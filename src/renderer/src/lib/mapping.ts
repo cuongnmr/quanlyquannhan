@@ -1,3 +1,5 @@
+import { format } from 'date-fns'
+
 export const mapCapBac = (capbac: string) => {
   const mapping: Record<string, string> = {
     B1: 'Binh nhất',
@@ -66,6 +68,8 @@ export function getValue(key: string, input?: string) {
     return 'Chưa có thông tin'
   }
   switch (key) {
+    case 'ngaysinh':
+      return format(input, 'dd/MM/yyyy')
     case 'capbac':
       return mapCapBac(input)
     case 'chucvu':
